@@ -158,6 +158,8 @@ public partial class TouchpadPageViewModel : MainPageViewModelBase
                     LeftAction = LeftAction,
                     RightAction = RightAction
                 });
+                SppMessageReceiver.Instance.TouchOptionLeft = LeftAction;
+                SppMessageReceiver.Instance.TouchOptionRight = RightAction;
                 
                 // Custom actions are only available on desktop
                 if (!PlatformUtils.IsDesktop && (LeftAction == TouchOptions.OtherL || RightAction == TouchOptions.OtherR))

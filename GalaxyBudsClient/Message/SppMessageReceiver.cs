@@ -71,9 +71,40 @@ public class SppMessageReceiver
             case MsgIds.FIND_MY_EARBUDS_STOP:
                 FindMyGearStopped?.Invoke(this, EventArgs.Empty);
                 break;
+            case MsgIds.TOUCH_ON_BUDS:
+                HandleTouchOnBuds(msg);
+                break;
         }
     }
-    
+
+    /* Last known touch options of each earbud (from status updates or from the app changing them) */
+    public TouchOptions? TouchOptionLeft { set; get; }
+    public TouchOptions? TouchOptionRight { set; get; }
+
+    private const byte TouchOnBudsHoldStart = 0x04;
+    private bool _receivedOtherOptionMessage;
+
+    /// <summary>
+    /// Newer models (e.g. Buds3 Pro) don't send SET_TOUCHPAD_OTHER_OPTION for the custom long-press action.
+    /// Instead, they report the gesture via TOUCH_ON_BUDS: payload[1] = side (0 = left, 1 = right),
+    /// payload[2] = gesture (0x04 = hold started, 0x05 = hold released).
+    /// </summary>
+    private void HandleTouchOnBuds(SppMessage msg)
+    {
+        Log.Debug("SppMessageReceiver: TOUCH_ON_BUDS {Payload}", BitConverter.ToString(msg.Payload));
+
+        if (_receivedOtherOptionMessage || msg.Payload.Length < 3 || msg.Payload[2] != TouchOnBudsHoldStart)
+            return;
+
+        var isLeft = msg.Payload[1] == 0;
+        var option = isLeft ? TouchOptions.OtherL : TouchOptions.OtherR;
+        var configured = isLeft ? TouchOptionLeft : TouchOptionRight;
+        if (configured != option)
+            return;
+
+        OtherOption?.Invoke(this, option);
+    }
+
     private void DispatchEventByDecoder(BaseMessageDecoder decoder)
     {
         AnyMessageDecoded?.Invoke(this, decoder);
@@ -127,6 +158,8 @@ public class SppMessageReceiver
                 if (device != null) 
                     device.DeviceColor = p.DeviceColor;
 
+                TouchOptionLeft = p.TouchpadOptionL;
+                TouchOptionRight = p.TouchpadOptionR;
                 BaseUpdate?.Invoke(this, p);
                 ExtendedStatusUpdate?.Invoke(this, p);
                 break;
@@ -137,6 +170,7 @@ public class SppMessageReceiver
                 SelfTestResponse?.Invoke(this, p);
                 break;
             case SetOtherOptionDecoder p:
+                _receivedOtherOptionMessage = true;
                 OtherOption?.Invoke(this, p.OptionType);
                 break;
             case StatusUpdateDecoder p:
