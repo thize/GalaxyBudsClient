@@ -24,6 +24,8 @@ public partial class TouchActionEditorDialogViewModel : ViewModelBase
         action ??= new CustomAction(Event.None);
             
         ActionMode = action.Action;
+        // ActionMode may equal its default value, in which case no PropertyChanged event fires
+        UpdateEditableParameters();
         switch (ActionMode)
         {
             case CustomActions.Event:
@@ -84,14 +86,19 @@ public partial class TouchActionEditorDialogViewModel : ViewModelBase
         HotkeyParameter = string.Join(",", result);
     }
         
+    private void UpdateEditableParameters()
+    {
+        IsEventParameterEditable = ActionMode == CustomActions.Event;
+        IsPathParameterEditable = ActionMode == CustomActions.RunExternalProgram;
+        IsHotkeyParameterEditable = ActionMode == CustomActions.TriggerHotkey;
+    }
+
     private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         switch (e.PropertyName)
         {
             case nameof(ActionMode):
-                IsEventParameterEditable = ActionMode == CustomActions.Event;
-                IsPathParameterEditable = ActionMode == CustomActions.RunExternalProgram;
-                IsHotkeyParameterEditable = ActionMode == CustomActions.TriggerHotkey;
+                UpdateEditableParameters();
                 break;
             case nameof(EventParameter):
             case nameof(PathParameter):
