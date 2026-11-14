@@ -152,6 +152,9 @@ Right: {1}</sys:String>
     <sys:String x:Key="event_manager_visible">Show/hide manager window</sys:String>
     <sys:String x:Key="event_display_battery_popup">Display battery popup</sys:String>
     <sys:String x:Key="event_connect">Connect to device</sys:String>
+    <sys:String x:Key="event_mic_mute_toggle">Mute/unmute microphone</sys:String>
+    <sys:String x:Key="mic_muted">Microphone muted</sys:String>
+    <sys:String x:Key="mic_unmuted">Microphone unmuted</sys:String>
 
     <!--Welcome page-->
     <sys:String x:Key="welcome_textblock_header">Welcome!</sys:String>

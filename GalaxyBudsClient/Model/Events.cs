@@ -52,7 +52,9 @@ public enum Event
     Pause,
     [LocalizableDescription(Keys.EventConnect)]
     Connect,
-            
+    [LocalizableDescription(Keys.EventMicMuteToggle)]
+    ToggleMicMute,
+
     /* INTERNAL */
     [IgnoreDataMember]
     UpdateTrayIcon,

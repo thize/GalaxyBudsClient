@@ -149,6 +149,9 @@ Direito: {1}</sys:String>
     <sys:String x:Key="event_manager_visible">Mostrar/ocultar janela do gerenciador</sys:String>
     <sys:String x:Key="event_display_battery_popup">Exibir popup de bateria</sys:String>
     <sys:String x:Key="event_connect">Conectar ao dispositivo</sys:String>
+    <sys:String x:Key="event_mic_mute_toggle">Mutar/desmutar microfone</sys:String>
+    <sys:String x:Key="mic_muted">Microfone mutado</sys:String>
+    <sys:String x:Key="mic_unmuted">Microfone ativado</sys:String>
 
     <!--Welcome page-->
     <sys:String x:Key="welcome_textblock_header">Bem-vindo!</sys:String>

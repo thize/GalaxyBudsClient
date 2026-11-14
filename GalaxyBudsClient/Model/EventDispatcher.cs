@@ -45,7 +45,9 @@ public class EventDispatcher
                 return BluetoothImpl.Instance.DeviceSpec.Supports(Features.DetectConversations);
             case Event.PairingMode:
                 return BluetoothImpl.Instance.DeviceSpec.Supports(Features.PairingMode);
-                
+            case Event.ToggleMicMute:
+                return MicrophoneMute.IsSupported;
+
             /* INTERNAL */
             case Event.UpdateTrayIcon:
             case Event.SetNoiseControlState:

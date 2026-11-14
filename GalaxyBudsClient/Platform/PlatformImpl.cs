@@ -90,6 +90,9 @@ public static class PlatformImpl
             case Event.TogglePlayPause:
                 MediaKeyRemote.PlayPause();
                 break;
+            case Event.ToggleMicMute:
+                MicrophoneMute.Toggle();
+                break;
         }
     }
 }
